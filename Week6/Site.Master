@@ -39,7 +39,7 @@
           </div><!-- /.container-fluid -->
         </nav>
         <!--end nav-->
-    <div>
+    <div class="container">
         <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
         <!--dynamic page content goes here-->
             
