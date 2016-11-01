@@ -79,6 +79,7 @@
     <Content Include="department-details.aspx" />
     <Content Include="departments.aspx" />
     <Content Include="packages.config" />
+    <Content Include="Scripts\main.js" />
     <Content Include="ServerSideServerModal.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ServerSideServerModal.Context.cs</LastGenOutput>

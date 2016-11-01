@@ -32,5 +32,28 @@ namespace Week6
             grdDepartments.DataBind();
 
         }
+
+        protected void grdDepartments_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            int gridIndex = e.RowIndex;
+
+            // 1. determine which row is gonna get deleted
+            int DeparmantID = (int) grdDepartments.DataKeys[gridIndex].Value;
+
+            // 2. find a deparmentID value in the selected row
+            var conn = new Entities();
+
+            // 3. connect to the db
+            Department d = new Department();
+            d.DepartmentID = DeparmantID;
+
+            // 4. delete the selected row
+            conn.Departments.Attach(d);
+            conn.Departments.Remove(d);
+            conn.SaveChanges();
+
+            // 5. refresh the page after deletion
+            getDepartments();
+        }
     }
 }

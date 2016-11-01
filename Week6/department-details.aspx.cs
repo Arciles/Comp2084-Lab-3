@@ -6,6 +6,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 // database reference
 using System.Web.ModelBinding;
+using System.Collections.Specialized;
+using System.Data.Entity;
 
 namespace Week6
 {
@@ -13,11 +15,36 @@ namespace Week6
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if(!IsPostBack)
+            {
+                if (!String.IsNullOrEmpty(Request.QueryString["DepartmentId"]))
+                {
+                    int DepartmentID = Convert.ToInt32(Request.QueryString["DepartmentId"]);
+                    var conn = new Entities();
 
+                    var objDep = (from d in conn.Departments
+                                  where d.DepartmentID == DepartmentID
+                                  select d).FirstOrDefault();
+                    if (objDep != null)
+                    {
+                        txtName.Text = objDep.Name;
+                        txtBudget.Text = objDep.Budget.ToString();
+                    }
+                }
+            }
+           
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
+            // Default value for deparment id
+            int DepartmentID = -1;
+
+            if (!String.IsNullOrEmpty(Request.QueryString["DepartmentId"]))
+            {
+                DepartmentID = Convert.ToInt32(Request.QueryString["DepartmentId"]);
+            }
+
             // disable btnSave to prevent user clicking the button again
             btnSave.Enabled = false;
 
@@ -35,10 +62,18 @@ namespace Week6
             // create error handling for any kind of exceptions 
             try
             {
-                // save the new object to the database
-                connection.Departments.Add(department);
-                connection.SaveChanges();
+                if(DepartmentID == -1)
+                    // save the new object to the database
+                    connection.Departments.Add(department);
+                else
+                {
+                    // update the existing record
+                    department.DepartmentID = DepartmentID;
+                    connection.Departments.Attach(department);
+                    connection.Entry(department).State = EntityState.Modified;
+                }
 
+                connection.SaveChanges();
                 // redirect back to the departments page after successful save
                 Response.Redirect("departments.aspx");
             } catch (System.Data.Entity.Infrastructure.DbUpdateException exception)
