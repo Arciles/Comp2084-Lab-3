@@ -18,14 +18,14 @@ namespace Week6
                     int studentID = Convert.ToInt32(Request.QueryString["StudentID"]);
                     var conn = new Entities();
 
-                    var objDep = (from d in conn.Students
+                    var objSut = (from d in conn.Students
                                   where d.StudentID == studentID
                                   select d).FirstOrDefault();
-                    if (objDep != null)
+                    if (objSut != null)
                     {
-                        txtStudentFirstAndMidName.Text = objDep.FirstMidName;
-                        txtStudentLastName.Text = objDep.LastName;
-                        txtStudentEnrollmentDate.Text = objDep.EnrollmentDate.ToString("d");
+                        txtStudentFirstAndMidName.Text = objSut.FirstMidName;
+                        txtStudentLastName.Text = objSut.LastName;
+                        txtStudentEnrollmentDate.Text = objSut.EnrollmentDate.ToString("d");
                     }
                 }
             }
