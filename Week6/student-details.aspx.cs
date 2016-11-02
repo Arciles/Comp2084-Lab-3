@@ -11,6 +11,24 @@ namespace Week6
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!IsPostBack)
+            {
+                if (!String.IsNullOrEmpty(Request.QueryString["StudentID"]))
+                {
+                    int studentID = Convert.ToInt32(Request.QueryString["StudentID"]);
+                    var conn = new Entities();
+
+                    var objDep = (from d in conn.Students
+                                  where d.StudentID == studentID
+                                  select d).FirstOrDefault();
+                    if (objDep != null)
+                    {
+                        txtStudentFirstAndMidName.Text = objDep.FirstMidName;
+                        txtStudentLastName.Text = objDep.LastName;
+                        txtStudentEnrollmentDate.Text = objDep.EnrollmentDate.ToString("d");
+                    }
+                }
+            }
             // set the max value of the enrollment date field to today
             txtStudentEnrollmentDate.Attributes.Add("max" , DateTime.Today.ToString("dd/MM/yyyy"));
         }
@@ -19,6 +37,15 @@ namespace Week6
         {
             // disable the button to prevent multiple user clicks
             btnSave.Enabled = false;
+
+            // set the student id to -1 as default control
+            int studentID = -1;
+
+            // check the query string to find is there any parameters are passed
+            if (!String.IsNullOrEmpty(Request.QueryString["StudentID"]))
+            {
+                studentID = Convert.ToInt32(Request.QueryString["StudentID"]);
+            }
 
             // open data base connection
             var connection = new Entities();
@@ -33,9 +60,21 @@ namespace Week6
 
             // create error handling for any kind of exceptions 
             try
-            {
-                // add the new entity to database and save the changes
-                connection.Students.Add(student);
+            {   // this means we're creating a new student
+                if(studentID == -1)
+                {
+                    // add the new entity to database and save the changes
+                    connection.Students.Add(student);
+                }
+                // this means we're updating an existing record
+                else
+                {
+                    student.StudentID = studentID;
+                    connection.Students.Attach(student);
+                    connection.Entry(student).State = System.Data.Entity.EntityState.Modified;
+                }
+                
+                
                 connection.SaveChanges();
 
                 // redirect user to Students page

@@ -45,7 +45,7 @@ namespace Week6
 
             // 3. connect to the db
             Department d = new Department();
-            d.DepartmentID = DeparmantID;
+            d.DepartmentID = DeparmantID; 
 
             // 4. delete the selected row
             conn.Departments.Attach(d);
