@@ -25,7 +25,7 @@ namespace Week6
                     {
                         txtStudentFirstAndMidName.Text = objSut.FirstMidName;
                         txtStudentLastName.Text = objSut.LastName;
-                        txtStudentEnrollmentDate.Text = objSut.EnrollmentDate.ToString("d");
+                        txtStudentEnrollmentDate.Text = objSut.EnrollmentDate.ToString("yyyy/MM/dd");
                     }
                 }
             }
