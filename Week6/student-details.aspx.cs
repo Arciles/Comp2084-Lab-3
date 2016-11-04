@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -11,6 +13,7 @@ namespace Week6
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-CA");
             if (!IsPostBack)
             {
                 if (!String.IsNullOrEmpty(Request.QueryString["StudentID"]))
@@ -25,7 +28,7 @@ namespace Week6
                     {
                         txtStudentFirstAndMidName.Text = objSut.FirstMidName;
                         txtStudentLastName.Text = objSut.LastName;
-                        txtStudentEnrollmentDate.Text = objSut.EnrollmentDate.ToString("yyyy/MM/dd");
+                        txtStudentEnrollmentDate.Text = objSut.EnrollmentDate.ToString("d");
                     }
                 }
             }
